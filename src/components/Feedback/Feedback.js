@@ -1,27 +1,25 @@
-import { Component } from 'react';
+export default function Feedback({ options, onLeaveFeedback }) {
+  // const { options } = this.props;
 
-export default class Feedback extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
-  render() {
-    return (
-      <>
-        <section>
-          <h2>Please leave feedback</h2>
-          <button>good</button>
-          <button>neutral</button>
-          <button>bad</button>
-        </section>
-        <section>
-          <h2>statistics</h2>
-          <p>good:{}</p>
-          <p>neutral:{}</p>
-          <p>bad:{}</p>
-        </section>
-      </>
-    );
-  }
+  return (
+    <section>
+      <h2>Please leave feedback</h2>
+      <div>
+        {/* {Object.entries(options).map(([key, label]) => (
+          <button key={key} onClick={() => onLeaveFeedback(key)}>
+            {label}
+          </button>
+        ))} */}
+        {Object.entries(options).map(([key, label]) => (
+          <button key={key} onClick={() => onLeaveFeedback(label)}>
+            {label}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
 }
+
+//  onClick={() => this.setActiveBtn(key)}
+
+// {[option]:state[option]+1}
