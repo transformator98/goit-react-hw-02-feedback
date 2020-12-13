@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import Container from './components/Container';
-import Feedback from './components/Feedback';
+import FeedbackOptions from './components/Feedback';
+import Statistics from './components/Statistics';
+import Section from './components/Section';
+import Notification from './components/Notification';
 
 class App extends Component {
   state = {
@@ -10,39 +13,55 @@ class App extends Component {
   };
 
   leveFeedback = option => {
-    console.log('option', option);
-
-    this.setState({ [option]: this.state[option] + 1 });
+    this.setState(prevState => {
+      return {
+        [option]: prevState[option] + 1,
+      };
+    });
   };
 
-  // feedbackSum = option => {
-  //   return this.state[option].reduce(
-  //     (total, value) => console.log('total', total, 'value', value),
-  //     0,
-  //   );
-  // };
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const { good } = this.state;
+    const total = this.countTotalFeedback();
+
+    return total > 0 ? Math.round((good / total) * 100) : 0;
+  };
 
   render() {
-    // const totalFeedback = this.feedbackSum();
-    console.log(this.leveFeedback);
     const { good, neutral, bad } = this.state;
+    const total = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
 
     return (
       <Container>
-        <Feedback
-          options={['good', 'neutral', 'bad']}
-          onLeaveFeedback={this.leveFeedback}
-        />
-        <div>
-          <h2>statistics</h2>
-          <p>good:{good}</p>
-          <p>neutral:{neutral}</p>
-          <p>bad:{bad}</p>
-        </div>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            options={['good', 'neutral', 'bad']}
+            onLeaveFeedback={this.leveFeedback}
+          />
+        </Section>
+        <Section title="statistics">
+          {total > 0 ? (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positivePercentage={positivePercentage}
+            />
+          ) : (
+            <Notification message="No feedback given" />
+          )}
+        </Section>
       </Container>
     );
   }
 }
 
 export default App;
-// onLeaveFeedback = {};
